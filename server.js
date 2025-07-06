@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const QUERY = "scam";
-const CONCURRENCY = 10;
+const CONCURRENCY = 1;
 
 async function searchYouTube() {
     const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
