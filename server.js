@@ -2,9 +2,9 @@ const http = require("http");
 const fetch = require("node-fetch");
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
-const QUERY = "scam";
-const CONCURRENCY = 1;
-const DISPATCH_INTERVAL = 10000;
+const QUERY = "your api key just got scammed";
+const CONCURRENCY = 10;
+const DISPATCH_INTERVAL = 100;
 
 let lastResults = [];
 
