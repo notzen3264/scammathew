@@ -3,10 +3,11 @@ const fetch = require("node-fetch");
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const QUERY = "your api key just got scammed";
-const CONCURRENCY = 10;
-const DISPATCH_INTERVAL = 100;
+const CONCURRENCY = 5;
+const DISPATCH_INTERVAL = 1000;
 
 let lastResults = [];
+let lastResponseRaw = null;
 
 async function searchYouTube() {
     const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
@@ -15,11 +16,22 @@ async function searchYouTube() {
 
     try {
         const response = await fetch(url);
+
+        // Log HTTP status and headers
+        console.log(`Response Status: ${response.status}`);
+        console.log("Headers:");
+        for (let [key, value] of response.headers.entries()) {
+            console.log(`  ${key}: ${value}`);
+        }
+
         const data = await response.json();
         lastResults = data.items || [];
+        lastResponseRaw = data;
+
+        console.log("Response Body:", JSON.stringify(data, null, 2));
         console.log(`Got ${lastResults.length} videos`);
     } catch (err) {
-        console.error("Error:", err.message);
+        console.error("Error during fetch:", err.message);
     }
 }
 
@@ -37,7 +49,7 @@ function runFlood() {
 const server = http.createServer((req, res) => {
     if (req.method === "GET" && req.url === "/results") {
         res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ videos: lastResults }));
+        res.end(JSON.stringify({ videos: lastResults, raw: lastResponseRaw }));
     } else {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Not found" }));
