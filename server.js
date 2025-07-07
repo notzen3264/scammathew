@@ -2,7 +2,8 @@ const fetch = require("node-fetch");
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const QUERY = "scam";
-const CONCURRENCY = 1;
+const CONCURRENCY = 1; // Number of requests per batch
+const DISPATCH_INTERVAL = 10000; // Dispatch every 10 seconds
 
 async function searchYouTube() {
     const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
@@ -26,7 +27,7 @@ async function runFlood() {
         }
         counter++;
         console.log(`Batch ${counter} dispatched`);
-    }, 1000);
+    }, DISPATCH_INTERVAL);
 }
 
 runFlood();
