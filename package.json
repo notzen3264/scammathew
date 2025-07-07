@@ -1,11 +1,17 @@
 {
-  "name": "youtube-spammer",
+  "name": "ballsuckerscam",
   "version": "1.0.0",
+  "description": "deez nuts",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "node-fetch": "^2.6.7"
-  }
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "author": "Mr.Spheroid",
+  "license": "balls"
 }
