@@ -12,7 +12,7 @@ let lastResponseRaw = null;
 async function searchYouTube() {
     const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
         QUERY
-    )}&type=video&maxResults=1&key=${API_KEY}`;
+    )}&type=video&maxResults=10&key=${API_KEY}`;
 
     try {
         const response = await fetch(url);
