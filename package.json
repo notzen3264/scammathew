@@ -1,17 +1,15 @@
 {
-  "name": "ballsuckerscam",
+  "name": "youtube-referrer-proxy",
   "version": "1.0.0",
-  "description": "deez nuts",
-  "main": "server.js",
+  "description": "Node.js script that fetches YouTube API data with a custom Referer header",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
+  "keywords": ["youtube", "api", "referrer", "proxy", "nodejs"],
+  "author": "fake",
+  "license": "fake",
   "dependencies": {
-    "node-fetch": "^2.6.7"
-  },
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "author": "Mr.Spheroid",
-  "license": "balls"
+    "dotenv": "^16.0.3"
+  }
 }
