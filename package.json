@@ -2,9 +2,9 @@
   "name": "youtube-referrer-proxy",
   "version": "1.0.0",
   "description": "Node.js script that fetches YouTube API data with a custom Referer header",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "keywords": ["youtube", "api", "referrer", "proxy", "nodejs"],
   "author": "fake",
