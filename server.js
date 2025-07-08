@@ -1,5 +1,5 @@
 const http = require("http");
-const fetch = require("node-fetch");
+const https = require("https");
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const QUERY = "your api key just got scammed";
@@ -10,29 +10,51 @@ let lastResults = [];
 let lastResponseRaw = null;
 
 async function searchYouTube() {
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
-        QUERY
-    )}&type=video&maxResults=10&key=${API_KEY}`;
-
-    try {
-        const response = await fetch(url);
-
-        // Log HTTP status and headers
-        console.log(`Response Status: ${response.status}`);
-        console.log("Headers:");
-        for (let [key, value] of response.headers.entries()) {
-            console.log(`  ${key}: ${value}`);
+    const options = {
+        hostname: 'www.googleapis.com',
+        path: `/youtube/v3/search?part=snippet&q=${encodeURIComponent(QUERY)}&type=video&maxResults=10&key=${API_KEY}`,
+        method: 'GET',
+        headers: {
+            'Referer': 'https://obsidian-video-search.netlify.app',
+            'User-Agent': 'Node.js Client', // optional but good practice
         }
+    };
 
-        const data = await response.json();
-        lastResults = data.items || [];
-        lastResponseRaw = data;
+    return new Promise((resolve, reject) => {
+        const req = https.request(options, (res) => {
+            let body = '';
+            console.log(`Response Status: ${res.statusCode}`);
+            console.log("Headers:");
+            for (let [key, value] of Object.entries(res.headers)) {
+                console.log(`  ${key}: ${value}`);
+            }
 
-        console.log("Response Body:", JSON.stringify(data, null, 2));
-        console.log(`Got ${lastResults.length} videos`);
-    } catch (err) {
-        console.error("Error during fetch:", err.message);
-    }
+            res.on('data', (chunk) => {
+                body += chunk;
+            });
+
+            res.on('end', () => {
+                try {
+                    const data = JSON.parse(body);
+                    lastResults = data.items || [];
+                    lastResponseRaw = data;
+                    console.log("Response Body:", JSON.stringify(data, null, 2));
+                    console.log(`Got ${lastResults.length} videos`);
+                    resolve();
+                } catch (err) {
+                    console.error("Error parsing response:", err.message);
+                    reject(err);
+                }
+            });
+        });
+
+        req.on('error', (err) => {
+            console.error("Error during request:", err.message);
+            reject(err);
+        });
+
+        req.end();
+    });
 }
 
 function runFlood() {
